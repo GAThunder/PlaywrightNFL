@@ -5,13 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlaywrightNFL
+namespace PlaywrightNFL.Classes
 {
-    public class Player
+    public class QB : Player
     {
-        public string? Name { get; set; }
-        public string? Team { get; set; }
-        public string? Position { get; set; }
+        public string? Completions { get; set; }
+        public string? Attempts { get; set; }
+        public string? Yards { get; set; }
+        public string? Touchdowns { get; set; }
+        public string? Interceptions { get; set; }
+        public string? Sacks { get; set; }
+        public string? Fumbles { get; set; }
+        public string? FirstDowns { get; set; }
+        public string? QBRating { get; set; }
     }
 
     public sealed class QBMap : ClassMap<QB>

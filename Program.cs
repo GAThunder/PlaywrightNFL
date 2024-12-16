@@ -9,6 +9,8 @@ using System.Threading;
 using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 using CsvHelper.Configuration;
+using PlaywrightNFL.Classes;
+using PlaywrightNFL.Helper;
 
 namespace PlaywrightNFL;
 class Program
@@ -17,23 +19,12 @@ class Program
     static async Task Main()
     {
 
-        // initialize a Playwright instance to
-        // perform browser automation
-        using var playwright = await Playwright.CreateAsync();
+        
 
-        // initialize a Chromium instance
-        await using var browser = await playwright.Chromium.LaunchAsync(new()
-        {
-            Headless = false, // set to "false" while developing
-        });
-        // open a new page within the current browser context
-        var page = await browser.NewPageAsync();
         //put the URL into a variable to make it easier to manage in case it has to be called again
-        var browserURl = "https://sports.yahoo.com/nfl/stats/weekly/?selectedTable=0&week={%22week%22:1,%22seasonPhase%22:%22REGULAR_SEASON%22}";
-        // Internet is a bit slow, needs time
-        page.SetDefaultTimeout(0);
-        // visit the target page
-        await page.GotoAsync(browserURl);
+        var browserURL = "https://sports.yahoo.com/nfl/stats/weekly/?selectedTable=0&week={%22week%22:1,%22seasonPhase%22:%22REGULAR_SEASON%22}";
+        var browserSetUp = new InitializeBrowser();
+        var page = await browserSetUp.SetURL(browserURL);
 
         //set the initial week, and the maximum amount of weeks currently played.
         int weekCount = 1;
