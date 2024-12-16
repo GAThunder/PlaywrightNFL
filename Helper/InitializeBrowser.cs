@@ -13,10 +13,13 @@ namespace PlaywrightNFL.Helper
         {
             // initialize a Playwright instance to
             // perform browser automation
-             var playwright = await Playwright.CreateAsync();
+            var playwright = await Playwright.CreateAsync();
+
+            //set the selector for Yahoos attributes
+            playwright.Selectors.SetTestIdAttribute("data-tst");
 
             // initialize a Chromium instance
-             var browser = await playwright.Chromium.LaunchAsync(new()
+            var browser = await playwright.Chromium.LaunchAsync(new()
             {
                 Headless = false, // set to "false" while developing
             });
