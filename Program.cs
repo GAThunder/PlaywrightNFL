@@ -15,7 +15,6 @@ using PlaywrightNFL.Helper;
 namespace PlaywrightNFL;
 class Program
 {
-   
     static async Task Main()
     {
         //put the URL into a variable to make it easier to manage in case it has to be called again
@@ -23,7 +22,6 @@ class Program
         var browserSetUp = new InitializeBrowser();
         //returns type IPage
         var page = await browserSetUp.SetURL(browserURL);
-
 
         //Select the week dropdown and get all current weeks
         var pageWeekCount = await page.GetByTestId("selection-dropdown").Nth(1).AllInnerTextsAsync();
@@ -36,7 +34,6 @@ class Program
 
         var namePosition = new ReturnPosition();
         
-
         for (int weekCount = 1; weekCount <= weekMax; weekCount++)
         {
 
@@ -47,10 +44,10 @@ class Program
             //Select the stat category
             await page.GetByRole(AriaRole.Button, new() { Name = "Passing" }).ClickAsync();
             //Get all rows of stats for that week
+            await page.GetByRole(AriaRole.Table).IsVisibleAsync();
             var tableRows = await page.GetByRole(AriaRole.Row).AllInnerTextsAsync();
             //Turn it into a list as tableRows isn't enumerable
             List<string> ListRows = tableRows.ToList();
-
 
             //Skip the header row
             IEnumerable<string[]> TableParsed = ListRows.Skip(1).Select(x =>
@@ -60,38 +57,14 @@ class Program
                 return parsed;
             });
 
-            /* The table I'm scraping doesn't have player positions. This will click on the player page, and fetch the position
-             * since the player's name appears multiple times, it'll put it into an internal dictionary, to fetch it inside the program
-             * and reduce page calls
-             */
-
             Console.WriteLine(weekCount);
 
             var PlayerRows = new List<QB>();
 
-            foreach (var playerInfoArr in TableParsed) {
+            var playerCreator = new CreatePlayers();
 
-                string? playerName = playerInfoArr[0];
-
-                //Check if the player is in the dictionary, and if not get his position and add him
-
-                var newPlayer = new QB {
-                    Name = playerInfoArr[0],
-                    Team = playerInfoArr[1],
-                    Position = await namePosition.returnFromDictionary(playerName, page, selectWeekOption),
-                    QBRating = playerInfoArr[2],
-                    Completions = playerInfoArr[3],
-                    Attempts = playerInfoArr[4],
-                    Yards = playerInfoArr[6],
-                    Touchdowns = playerInfoArr[8],
-                    Interceptions = playerInfoArr[9],
-                    FirstDowns = playerInfoArr[10],
-                    Sacks = playerInfoArr[11],
-                    Fumbles = playerInfoArr[13]
-                };
-
-                PlayerRows.Add(newPlayer);
-            }
+            await playerCreator.AddPlayers(TableParsed, PlayerRows, namePosition, page, selectWeekOption);
+            
             using (var writer = new StreamWriter($"Week{weekCount}_{currentYear}.csv"))
 
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
