@@ -46,7 +46,7 @@ class Program
         Dictionary<string, string> name_position = new Dictionary<string, string>();
         var PlayerRows = new List<QB>();
 
-        var TableParsed = new List<string[]>();
+        
 
         for (weekCount = 1; weekCount <= weekMax; weekCount++)
         {
@@ -57,24 +57,18 @@ class Program
             await page.GetByRole(AriaRole.Button, new() { Name = "Passing" }).ClickAsync();
             //Get all rows of stats for that week
             var tableRows = await page.GetByRole(AriaRole.Row).AllInnerTextsAsync();
-            //Turn it into a list to manage it easier
+            //Turn it into a list as tableRows isn't enumerable
             List<string> ListRows = tableRows.ToList();
 
 
-            //Console log it to help make sure the information is displaying correctly
-            ListRows.ForEach(row =>
+            //Skip the header row
+            IEnumerable<string[]> TableParsed = ListRows.Skip(1).Select(x =>
             {
-                //These two remove any new line breaks so its on a singal line
-                string replacement = Regex.Replace(row, @"\n", "");
-                //Takes the line and makes it into an array, will use this when assigning it to a class and exporting
+                string replacement = Regex.Replace(x, @"\n", "");
                 var parsed = replacement.Split('\t');
-
-                if (parsed[0] != "Player")
-                {
-                    TableParsed.Add(parsed);
-                }
-
+                return parsed;
             });
+
             /* The table I'm scraping doesn't have player positions. This will click on the player page, and fetch the position
              * since the player's name appears multiple times, it'll put it into an internal dictionary, to fetch it inside the program
              * and reduce page calls
@@ -140,12 +134,6 @@ class Program
 
             //Clear Table
             PlayerRows.Clear();
-            TableParsed.Clear();
-            
-
-
-
-
         }
     }
 }
