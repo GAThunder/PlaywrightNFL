@@ -9,12 +9,11 @@ using Microsoft.Playwright;
 
 namespace PlaywrightNFL.Helper
 {
-    public class CreatePlayers
+    public static class CreatePlayers
     {
         public static async Task AddPlayers(
             IEnumerable<string[]> TableParsed, 
             List<QB> PlayerRows,
-            ReturnPosition namePosition,
             IPage page,
             string selectWeekOption)
         {

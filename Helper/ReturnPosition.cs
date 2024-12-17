@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PlaywrightNFL.Helper
 {
-    public class ReturnPosition
+    public static class ReturnPosition
     {
         private static Dictionary<string, string> namePosition = new();
         public static async Task<string> returnFromDictionary(string playerName, IPage page, string selectWeekOption)

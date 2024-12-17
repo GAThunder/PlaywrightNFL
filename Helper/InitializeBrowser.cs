@@ -7,7 +7,7 @@ using Microsoft.Playwright;
 
 namespace PlaywrightNFL.Helper
 {
-    public class InitializeBrowser()
+    public static class InitializeBrowser
     {
         public static async Task<IPage> SetURL(string browserURL)
         {
