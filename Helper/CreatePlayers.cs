@@ -15,7 +15,8 @@ namespace PlaywrightNFL.Helper
             IEnumerable<string[]> TableParsed, 
             List<QB> PlayerRows,
             ReturnPosition namePosition,
-            IPage page, 
+            IPage page,
+            InitializeBrowser browserSetUp,
             string selectWeekOption)
         {
             foreach (var playerInfoArr in TableParsed)
@@ -28,7 +29,7 @@ namespace PlaywrightNFL.Helper
                 {
                     Name = playerInfoArr[0],
                     Team = playerInfoArr[1],
-                    Position = await namePosition.returnFromDictionary(playerName, page, selectWeekOption),
+                    Position = await namePosition.returnFromDictionary(playerName, page, selectWeekOption, browserSetUp),
                     QBRating = playerInfoArr[2],
                     Completions = playerInfoArr[3],
                     Attempts = playerInfoArr[4],

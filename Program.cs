@@ -39,12 +39,8 @@ class Program
 
             var selectWeekOption = "Map { \"week\": " + weekCount + ", \"seasonPhase\": \"REGULAR_SEASON\" }";
 
-            // Select the week we're getting the stats for
-            await page.GetByTestId("selection-dropdown").Nth(1).SelectOptionAsync(new[] { selectWeekOption });
-            //Select the stat category
-            await page.GetByRole(AriaRole.Button, new() { Name = "Passing" }).ClickAsync();
-            //Get all rows of stats for that week
-            await page.GetByRole(AriaRole.Table).IsVisibleAsync();
+            await browserSetUp.goToPassingPage(page, selectWeekOption);
+
             var tableRows = await page.GetByRole(AriaRole.Row).AllInnerTextsAsync();
             //Turn it into a list as tableRows isn't enumerable
             List<string> ListRows = tableRows.ToList();
@@ -63,7 +59,7 @@ class Program
 
             var playerCreator = new CreatePlayers();
 
-            await playerCreator.AddPlayers(TableParsed, PlayerRows, namePosition, page, selectWeekOption);
+            await playerCreator.AddPlayers(TableParsed, PlayerRows, namePosition, page, browserSetUp, selectWeekOption);
             
             using (var writer = new StreamWriter($"Week{weekCount}_{currentYear}.csv"))
 

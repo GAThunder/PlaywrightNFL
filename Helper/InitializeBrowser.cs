@@ -34,6 +34,16 @@ namespace PlaywrightNFL.Helper
 
             return page;
         }
+
+        public async Task goToPassingPage(IPage page, string selectWeekOption)
+        {
+            // Select the week we're getting the stats for
+            await page.GetByTestId("selection-dropdown").Nth(1).SelectOptionAsync(new[] { selectWeekOption });
+            //Select the stat category
+            await page.GetByRole(AriaRole.Button, new() { Name = "Passing" }).ClickAsync();
+            //Get all rows of stats for that week
+            await page.GetByRole(AriaRole.Table).IsVisibleAsync();
+        }
     }
 
 }

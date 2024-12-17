@@ -10,7 +10,7 @@ namespace PlaywrightNFL.Helper
     public class ReturnPosition
     {
         private Dictionary<string, string> namePosition = new();
-        public async Task<string> returnFromDictionary(string playerName, IPage page, string selectWeekOption)
+        public async Task<string> returnFromDictionary(string playerName, IPage page, string selectWeekOption, InitializeBrowser browserSetUp)
         {
             if (namePosition.ContainsKey(playerName))
             {
@@ -29,11 +29,10 @@ namespace PlaywrightNFL.Helper
                 var justPosition = justPositionSplit[1].Trim();
                 namePosition.Add(playerName, justPosition);
             }
+
             await page.GoBackAsync();
-            // Select the week we're getting the stats for
-            await page.GetByTestId("selection-dropdown").Nth(1).SelectOptionAsync(new[] { selectWeekOption });
-            //Select the stat category
-            await page.GetByRole(AriaRole.Button, new() { Name = "Passing" }).ClickAsync();
+
+            await browserSetUp.goToPassingPage(page, selectWeekOption);
 
             return namePosition[playerName];
         }
