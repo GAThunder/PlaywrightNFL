@@ -33,8 +33,6 @@ class Program
         var pageCurrentYearArr = pageCurrentYear[0].Split('\n');
         var currentYear = pageCurrentYearArr[0];
 
-        var currentWeekLabel = Regex.Replace(pageWeekCount[0], @"\n", " ");
-
         var namePosition = new ReturnPosition();
         
         for (int weekCount = 1; weekCount <= weekMax; weekCount++)
