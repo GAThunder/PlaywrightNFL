@@ -11,12 +11,11 @@ namespace PlaywrightNFL.Helper
 {
     public class CreatePlayers
     {
-        public async Task AddPlayers(
+        public static async Task AddPlayers(
             IEnumerable<string[]> TableParsed, 
             List<QB> PlayerRows,
             ReturnPosition namePosition,
             IPage page,
-            InitializeBrowser browserSetUp,
             string selectWeekOption)
         {
             foreach (var playerInfoArr in TableParsed)
@@ -29,7 +28,7 @@ namespace PlaywrightNFL.Helper
                 {
                     Name = playerInfoArr[0],
                     Team = playerInfoArr[1],
-                    Position = await namePosition.returnFromDictionary(playerName, page, selectWeekOption, browserSetUp),
+                    Position = await ReturnPosition.returnFromDictionary(playerName, page, selectWeekOption),
                     QBRating = playerInfoArr[2],
                     Completions = playerInfoArr[3],
                     Attempts = playerInfoArr[4],

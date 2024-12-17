@@ -9,8 +9,8 @@ namespace PlaywrightNFL.Helper
 {
     public class ReturnPosition
     {
-        private Dictionary<string, string> namePosition = new();
-        public async Task<string> returnFromDictionary(string playerName, IPage page, string selectWeekOption, InitializeBrowser browserSetUp)
+        private static Dictionary<string, string> namePosition = new();
+        public static async Task<string> returnFromDictionary(string playerName, IPage page, string selectWeekOption)
         {
             if (namePosition.ContainsKey(playerName))
             {
@@ -32,7 +32,7 @@ namespace PlaywrightNFL.Helper
 
             await page.GoBackAsync();
 
-            await browserSetUp.GoToPassingPage(page, selectWeekOption);
+            await InitializeBrowser.GoToPassingPage(page, selectWeekOption);
 
             return namePosition[playerName];
         }

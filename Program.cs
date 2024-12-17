@@ -19,9 +19,8 @@ class Program
     {
         //put the URL into a variable to make it easier to manage in case it has to be called again
         var browserURL = "https://sports.yahoo.com/nfl/stats/weekly/?selectedTable=0&week={%22week%22:1,%22seasonPhase%22:%22REGULAR_SEASON%22}";
-        var browserSetUp = new InitializeBrowser();
         //returns type IPage
-        var page = await browserSetUp.SetURL(browserURL);
+        var page = await InitializeBrowser.SetURL(browserURL);
 
         //Select the week dropdown and get all current weeks
         var pageWeekCount = await page.GetByTestId("selection-dropdown").Nth(1).AllInnerTextsAsync();
@@ -40,7 +39,7 @@ class Program
 
             var selectWeekOption = "Map { \"week\": " + weekCount + ", \"seasonPhase\": \"REGULAR_SEASON\" }";
 
-            await browserSetUp.GoToPassingPage(page, selectWeekOption);
+            await InitializeBrowser.GoToPassingPage(page, selectWeekOption);
 
             var tableRows = await page.GetByRole(AriaRole.Row).AllInnerTextsAsync();
             //Turn it into a list as tableRows isn't enumerable
@@ -54,13 +53,9 @@ class Program
                 return parsed;
             });
 
-            Console.WriteLine(weekCount);
-
             var PlayerRows = new List<QB>();
 
-            var playerCreator = new CreatePlayers();
-
-            await playerCreator.AddPlayers(TableParsed, PlayerRows, namePosition, page, browserSetUp, selectWeekOption);
+            await CreatePlayers.AddPlayers(TableParsed, PlayerRows, namePosition, page, selectWeekOption);
             
             using (var writer = new StreamWriter($"Week{weekCount}_{currentYear}.csv"))
 
@@ -70,6 +65,8 @@ class Program
                 // populate the CSV file
                 csv.WriteRecords(PlayerRows);
             }
+
+            Console.WriteLine($"Week {weekCount} Completed");
         }
     }
 }

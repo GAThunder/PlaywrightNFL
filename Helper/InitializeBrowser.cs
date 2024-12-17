@@ -9,7 +9,7 @@ namespace PlaywrightNFL.Helper
 {
     public class InitializeBrowser()
     {
-        public async Task<IPage> SetURL(string browserURL)
+        public static async Task<IPage> SetURL(string browserURL)
         {
             // initialize a Playwright instance to
             // perform browser automation
@@ -21,7 +21,7 @@ namespace PlaywrightNFL.Helper
             // initialize a Chromium instance
             var browser = await playwright.Chromium.LaunchAsync(new()
             {
-                Headless = false, // set to "false" while developing
+                Headless = true, // set to "false" while developing
             });
             // open a new page within the current browser context
             var page = await browser.NewPageAsync();
@@ -35,7 +35,7 @@ namespace PlaywrightNFL.Helper
             return page;
         }
 
-        public async Task GoToPassingPage(IPage page, string selectWeekOption)
+        public static async Task GoToPassingPage(IPage page, string selectWeekOption)
         {
             // Select the week we're getting the stats for
             await page.GetByTestId("selection-dropdown").Nth(1).SelectOptionAsync(new[] { selectWeekOption });
