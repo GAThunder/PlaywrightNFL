@@ -28,7 +28,10 @@ class Program
        //split it into an array so we can set weekMax from the count
         var weekArr = pageWeekCount[0].Split('\n');
         var weekMax = weekArr.Length;
-        var currentYear = 2024;
+
+        var pageCurrentYear = await page.GetByTestId("season-dropdown").AllInnerTextsAsync();
+        var pageCurrentYearArr = pageCurrentYear[0].Split('\n');
+        var currentYear = pageCurrentYearArr[0];
 
         var currentWeekLabel = Regex.Replace(pageWeekCount[0], @"\n", " ");
 
@@ -39,7 +42,7 @@ class Program
 
             var selectWeekOption = "Map { \"week\": " + weekCount + ", \"seasonPhase\": \"REGULAR_SEASON\" }";
 
-            await browserSetUp.goToPassingPage(page, selectWeekOption);
+            await browserSetUp.GoToPassingPage(page, selectWeekOption);
 
             var tableRows = await page.GetByRole(AriaRole.Row).AllInnerTextsAsync();
             //Turn it into a list as tableRows isn't enumerable

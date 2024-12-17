@@ -35,7 +35,7 @@ namespace PlaywrightNFL.Helper
             return page;
         }
 
-        public async Task goToPassingPage(IPage page, string selectWeekOption)
+        public async Task GoToPassingPage(IPage page, string selectWeekOption)
         {
             // Select the week we're getting the stats for
             await page.GetByTestId("selection-dropdown").Nth(1).SelectOptionAsync(new[] { selectWeekOption });

@@ -32,7 +32,7 @@ namespace PlaywrightNFL.Helper
 
             await page.GoBackAsync();
 
-            await browserSetUp.goToPassingPage(page, selectWeekOption);
+            await browserSetUp.GoToPassingPage(page, selectWeekOption);
 
             return namePosition[playerName];
         }
