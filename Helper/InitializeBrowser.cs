@@ -21,7 +21,7 @@ namespace PlaywrightNFL.Helper
             // initialize a Chromium instance
             var browser = await playwright.Chromium.LaunchAsync(new()
             {
-                Headless = true, // set to "false" while developing
+                Headless = false, // set to "false" while developing
             });
             // open a new page within the current browser context
             var page = await browser.NewPageAsync();

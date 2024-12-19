@@ -11,6 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 using CsvHelper.Configuration;
 using PlaywrightNFL.Classes;
 using PlaywrightNFL.Helper;
+using System.Runtime.InteropServices;
 
 namespace PlaywrightNFL;
 class Program
@@ -31,7 +32,7 @@ class Program
         var pageCurrentYear = await page.GetByTestId("season-dropdown").AllInnerTextsAsync();
         var pageCurrentYearArr = pageCurrentYear[0].Split('\n');
         var currentYear = pageCurrentYearArr[0];
-        
+
         for (int weekCount = 1; weekCount <= weekMax; weekCount++)
         {
 
@@ -53,7 +54,7 @@ class Program
 
             var PlayerRows = new List<QB>();
 
-            await CreatePlayers.AddPlayers(TableParsed, PlayerRows, page, selectWeekOption);
+            await CreatePlayers.AddPlayersToList(TableParsed, PlayerRows, page, selectWeekOption);
             
             using (var writer = new StreamWriter($"Week{weekCount}_{currentYear}.csv"))
 

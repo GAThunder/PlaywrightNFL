@@ -12,14 +12,22 @@ namespace PlaywrightNFL.Helper
         private static Dictionary<string, string> namePosition = new();
         public static async Task<string> returnFromDictionary(string playerName, IPage page, string selectWeekOption)
         {
+
             if (namePosition.ContainsKey(playerName))
             {
                 return namePosition[playerName];
             }
 
-            await page.GetByRole(AriaRole.Link, new() { Name = playerName }).ClickAsync();
-            await page.Locator(".Row > div").IsVisibleAsync();
-            var positionExtraInfo = await page.Locator(".Row > div").TextContentAsync();
+            var newURL = await page.GetByRole(AriaRole.Link, new() { Name = playerName }).GetAttributeAsync("href");
+
+            if (newURL == null)
+            {
+                Console.WriteLine("Null URL");
+            }
+            var newPage = await InitializeBrowser.SetURL(newURL);
+
+            await newPage.Locator(".Row > div").IsVisibleAsync();
+            var positionExtraInfo = await newPage.Locator(".Row > div").TextContentAsync();
 
             string? positionExtraInfoString = Convert.ToString(positionExtraInfo);
 
@@ -30,9 +38,7 @@ namespace PlaywrightNFL.Helper
                 namePosition.Add(playerName, justPosition);
             }
 
-            await page.GoBackAsync();
-
-            await InitializeBrowser.GoToPassingPage(page, selectWeekOption);
+            await newPage.CloseAsync();
 
             return namePosition[playerName];
         }
