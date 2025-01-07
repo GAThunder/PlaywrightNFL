@@ -26,6 +26,19 @@ namespace PlaywrightNFL.Helper
             // open a new page within the current browser context
             var page = await browser.NewPageAsync();
 
+            
+            await page.RouteAsync("**/*", async route =>
+           {
+               if (route.Request.Url.Contains("googlesyndication"))
+               {
+                   await route.AbortAsync();
+               }
+               else
+               {
+                   await route.ContinueAsync();
+               }
+           });
+
             // Internet here is a bit slow, needs time
             page.SetDefaultTimeout(0);
 
